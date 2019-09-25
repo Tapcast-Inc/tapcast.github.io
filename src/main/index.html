@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.getElementsByTagName("html")[0].className += " js";</script>
+  <script>
+    if('CSS' in window && CSS.supports('color', 'var(--color-var)')) {
+      document.write('<link rel="stylesheet" href="assets/css/style.css">');
+    } else {
+      document.write('<link rel="stylesheet" href="assets/css/style-fallback.css">');
+    }
+  </script>
+  <noscript>
+    <link rel="stylesheet" href="assets/css/style-fallback.css">
+  </noscript>
+  <title>Title</title>
+</head>
+<body>
+
+<div class="margin-top-sm grid justify-center">
+
+	    <div class="col-6 search-input search-input--icon-right">
+		<form id="search" action="#" method="post">
+	      <input class="form-control width-100%" type="search" name="searchInputX" id="searchInputX" placeholder="Search Podcasts...">
+	      <button class="search-input__btn">
+	        <svg class="icon" viewBox="0 0 24 24"><title>Search</title><g stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" stroke="currentColor" fill="none" stroke-miterlimit="10"><line x1="22" y1="22" x2="15.656" y2="15.656"></line><circle cx="10" cy="10" r="8"></circle></g></svg>
+	      </button>
+	  </form>
+	    </div>
+</div>
+		 
+		 
+<section class="hero justify-center text-center">
+  <div class="container max-width-adaptive-sm">
+
+    <div class="hero__content">
+
+      <div class="text-component margin-bottom-sm">
+
+		<p></p>
+
+		<img class="max-width-xxxxs" style="border-radius: 25px" src="../assets/img/logo.png" alt="Tapcast">
+		<p></p>
+		
+        <h1>Tapcast<sup style="font-size: 0.5em">TM</sup></h1>
+        <p>Record, Edit and Publish Podcasts</p>
+		
+		<h5 class="btn btn--primary" style="background-color: black">
+			 Coming Soon to the App Store</h5>
+
+  <div id="message">Hi
+  </div>
+
+      </div>
+  
+
+  
+    </div>
+  </div>
+</section>
+
+
+<script src="assets/js/scripts.js"></script>
+<script src="assets/js/jquery-3.4.1.min.js"></script>
+
+<script>
+	$("#message").text("Hello")
+	
+	$("#search").submit(function(event) {
+		event.preventDefault();
+		var term = $('#searchInputX').val().toLowerCase();
+		$("#searchInputX").val("")
+		$("#message").text(term)
+	})
+	
+</script>
+	
+</body>
+</html>
