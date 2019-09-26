@@ -14,14 +14,15 @@
   <noscript>
     <link rel="stylesheet" href="assets/css/style-fallback.css">
   </noscript>
+  
   <title>Title</title>
 </head>
 <body>
 
-<div class="margin-top-sm grid justify-center">
+<div class="margin-top-sm margin-bottom-sm grid justify-center">
 
 	    <div class="col-6 search-input search-input--icon-right">
-		<form id="search" action="#" method="post">
+		<form id="search" action="#" method="post" enctype="application/x-www-form-urlencoded">
 	      <input class="form-control width-100%" type="search" name="searchInputX" id="searchInputX" placeholder="Search Podcasts...">
 	      <button class="search-input__btn">
 	        <svg class="icon" viewBox="0 0 24 24"><title>Search</title><g stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" stroke="currentColor" fill="none" stroke-miterlimit="10"><line x1="22" y1="22" x2="15.656" y2="15.656"></line><circle cx="10" cy="10" r="8"></circle></g></svg>
@@ -31,7 +32,7 @@
 </div>
 		 
 		 
-<section class="hero justify-center text-center">
+<section id="main_banner" class="hero justify-center text-center">
   <div class="container max-width-adaptive-sm">
 
     <div class="hero__content">
@@ -48,31 +49,124 @@
 		
 		<h5 class="btn btn--primary" style="background-color: black">
 			 Coming Soon to the App Store</h5>
-
-  <div id="message">Hi
-  </div>
-
       </div>
-  
+    </div>
+  </div>
+</section> <!-- main_banner -->
 
-  
+<section class="p-table">
+  <div class="container max-width-adaptive-lg">
+    <div id="results" class="grid grid-gap-sm">
     </div>
   </div>
 </section>
 
+<div class="modal modal--header-is-fixed modal--footer-is-fixed js-modal" id="modal1" data-animation="on">
+  <div class="modal__content max-width-xs" role="alertdialog" tabindex="-1" aria-labelledby="modalTitle1" aria-describedby="modalDescription1">
+    <header class="modal__header">
+      <h4 class="text-truncate" id="modalTitle1">Modal title</h4>
+
+      <button class="reset modal__close-btn js-modal__close">
+        <svg class="icon" viewBox="0 0 20 20"><title>Close modal window</title><polygon points="18.707 2.707 17.293 1.293 10 8.586 2.707 1.293 1.293 2.707 8.586 10 1.293 17.293 2.707 18.707 10 11.414 17.293 18.707 18.707 17.293 11.414 10 18.707 2.707"/></svg>
+      </button>
+    </header>
+
+    <div class="modal__body">
+      <div class="text-component">
+
+		<img id="playerImage" class="max-width-xxxxs" style="border-radius: 15px" src="https://is1-ssl.mzstatic.com/image/thumb/Podcasts113/v4/e8/a2/c4/e8a2c427-769d-308a-7f12-197a8a6445db/mza_1998632243265378345.jpg/600x600bb.jpg">
+
+		<audio controls preload="auto" style="width: 100%" class="margin-top-sm">
+			<source src="" type="audio/mpeg">
+			Your browser does not support the audio element.
+		</audio>
+		  
+      </div>
+    </div>
+
+    <footer class="modal__footer">
+      <div class="flex justify-end flex-gap-xs">
+        <button class="btn btn--subtle js-modal__close">Close</button>
+        <!-- <button class="btn btn--primary">Install</button> -->
+      </div>
+    </footer>
+  </div>
+</div>
 
 <script src="assets/js/scripts.js"></script>
 <script src="assets/js/jquery-3.4.1.min.js"></script>
 
 <script>
-	$("#message").text("Hello")
 	
 	$("#search").submit(function(event) {
 		event.preventDefault();
+		$("#main_banner").hide()
 		var term = $('#searchInputX').val().toLowerCase();
-		$("#searchInputX").val("")
-		$("#message").text(term)
+		
+		if (term.length == 0) {
+			$('#results').empty()
+			$("#main_banner").show();
+			return;
+		}
+		term = term.split(' ').join('+')
+		term = encodeURI(term)
+
+		$.ajax({
+		    url: "https://itunes.apple.com/search",
+		    type: "GET",
+			dataType: 'json',
+			limit: '25',
+		    data: {
+		        "term": term,
+				"media": "podcast",
+		    },
+		})
+		.done(function(data, textStatus, jqXHR) {
+			$('#results').empty()
+			$.each(data.results, function(index, element) {
+				$('#results').append(castEntry(
+					element.trackId,
+					element.trackName, 
+					element.artistName,
+					element.artworkUrl100
+				))
+			})
+			
+			MakeModal();
+			
+			$('#modal1').on("modalIsOpen", function(event) {
+				console.log("Modal open: " + event.detail.id)
+			})
+		})
+
 	})
+	
+	function castEntry(trackId, title, artist, image) {
+		var entry = ''
+		
+		entry += '<div class="p-table__item col-4@md">'
+
+
+		entry += '	<div class="flex  margin-bottom-xxs">'
+		entry += ' 		<img class="margin-xs" src="' + image + '">'
+		entry += '		<h4 class="p-table__title">' + title + '</h4>'
+		//entry += '		<span class="p-table__badge">Popular</span>'
+		entry += '	</div>'
+
+		entry += '	<div class="p-table__price margin-bottom-sm"><i>by</i> ' + artist + '</div>'
+
+		// entry += '<ul class="p-table__features margin-bottom-md">'
+		// entry += '<li>Access to all features</li>'
+		// entry += ' <li>10 projects</li>'
+		// entry += '<li>E-commerce integration</li>'
+		// entry += ' <li>Email support</li>'
+		// entry += '</ul>'
+		
+		entry += '<div class="margin-top-auto"><button id="' + trackId + '" class="btn btn--primary btn--md width-50%" aria-controls="modal1">Listen</button></div>'
+		entry += '</div>'
+		
+		return entry
+	}
 	
 </script>
 	
