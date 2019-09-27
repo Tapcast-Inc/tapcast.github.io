@@ -1,2 +1,186 @@
-hello world
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.getElementsByTagName("html")[0].className += " js";</script>
+  <script>
+    if('CSS' in window && CSS.supports('color', 'var(--color-var)')) {
+      document.write('<link rel="stylesheet" href="assets/css/style.css">');
+    } else {
+      document.write('<link rel="stylesheet" href="assets/css/style-fallback.css">');
+    }
+  </script>
+  <noscript>
+    <link rel="stylesheet" href="assets/css/style-fallback.css">
+  </noscript>
+  
+  <title>Title</title>
+</head>
+<body>
 
+<div class="margin-top-sm margin-bottom-sm grid justify-center">
+
+	    <div class="col-6 search-input search-input--icon-right">
+		<form id="search" action="#" method="post" enctype="application/x-www-form-urlencoded">
+	      <input class="form-control width-100%" type="search" name="searchInputX" id="searchInputX" placeholder="Search Podcasts...">
+	      <button class="search-input__btn">
+	        <svg class="icon" viewBox="0 0 24 24"><title>Search</title><g stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" stroke="currentColor" fill="none" stroke-miterlimit="10"><line x1="22" y1="22" x2="15.656" y2="15.656"></line><circle cx="10" cy="10" r="8"></circle></g></svg>
+	      </button>
+	  </form>
+	    </div>
+</div>
+		 
+		 
+<section id="main_banner" class="hero justify-center text-center">
+  <div class="container max-width-adaptive-sm">
+
+    <div class="hero__content">
+
+      <div class="text-component margin-bottom-sm">
+
+		<p></p>
+
+		<img class="max-width-xxxxs" style="border-radius: 25px" src="assets/img/logo.png" alt="Tapcast">
+		<p></p>
+		
+        <h1>Tapcast<sup style="font-size: 0.5em">TM</sup></h1>
+        <p>Record, Edit and Publish Podcasts</p>
+		
+		<h5 class="btn btn--primary" style="background-color: black">
+			 Coming Soon to the App Store</h5>
+      </div>
+    </div>
+  </div>
+</section> <!-- main_banner -->
+
+<div class="text-divider" id="searchResults"><span>Search Results</span></div>
+
+<section class="p-table">
+  <div class="container max-width-adaptive-lg">
+    <div id="results" class="grid grid-gap-sm">
+    </div>
+  </div>
+</section>
+
+<div class="modal modal--header-is-fixed modal--footer-is-fixed js-modal" id="modal1" data-animation="on">
+  <div class="modal__content max-width-xs" role="alertdialog" tabindex="-1" aria-labelledby="modalTitle1" aria-describedby="modalDescription1">
+	  
+    <header class="modal__header">
+      <h4 class="text-truncate" id="modalTitle1"> </h4>
+
+      <button class="reset modal__close-btn js-modal__close">
+        <svg class="icon" viewBox="0 0 20 20"><title>Close modal window</title><polygon points="18.707 2.707 17.293 1.293 10 8.586 2.707 1.293 1.293 2.707 8.586 10 1.293 17.293 2.707 18.707 10 11.414 17.293 18.707 18.707 17.293 11.414 10 18.707 2.707"/></svg>
+      </button>
+    </header>
+
+    <div class="modal__body">
+      <div class="text-component">
+
+		  <h4>Please wait, opening episodes list...</h4>
+		  
+      </div>
+    </div>
+
+	<!--
+    <footer class="modal__footer">
+      <div class="flex justify-end flex-gap-xs">
+        <button class="btn btn--subtle js-modal__close">Close</button>
+        <!-- <button class="btn btn--primary">Install</button> -->
+      </div>
+    </footer>
+	-->
+  </div>
+</div>
+
+<script src="assets/js/scripts.js"></script>
+<script src="assets/js/jquery-3.4.1.min.js"></script>
+
+<script>
+	
+	var modal;
+	
+	$('#searchResults').html("<span>Search Results for: technology</span>")
+	$.getScript('https://itunes.apple.com/search?term=' + 'technology' + '&media=podcast&callback=searchSetInfo')
+	
+	$("#search").submit(function(event) {
+		event.preventDefault();
+		
+		$("#main_banner").hide()
+		
+		
+		var term = $('#searchInputX').val().toLowerCase();
+		
+		if (term.length == 0) {
+			$('#results').empty()
+			$("#main_banner").show();
+			$('#searchResults').html("<span>Search Results</span>")
+			return;
+		} else {
+			$('#searchResults').html("<span>Search Results for: " + $('#searchInputX').val() + "</span>")
+		}
+		term = term.split(' ').join('+')
+		term = encodeURI(term)
+
+		$.getScript('https://itunes.apple.com/search?term=' + term + '&media=podcast&callback=searchSetInfo')
+	})
+
+	function searchSetInfo(data) {
+		
+			$('#results').empty()
+		
+			console.log("data " + data)				
+		
+			$.each(data.results, function(index, element) {
+				$('#results').append(castEntry(
+					element.trackId,
+					element.trackName, 
+					element.artistName,
+					element.artworkUrl100
+				))
+			});
+			
+			var modals = document.getElementsByClassName('js-modal');
+			if( modals.length > 0 ) {
+				for( var i = 0; i < modals.length; i++) {
+					(function(i){modal = new Modal(modals[i]);})(i);
+				}
+			}
+			
+			$('#modal1').on("modalIsOpen", function(event) {
+				var podcastId = event.detail.id
+				$.getScript('https://itunes.apple.com/lookup?id=' + podcastId + '&callback=modalSetInfo')
+			})
+	}
+	
+	function modalSetInfo(data) {
+		var item = data.results[0]
+		setTimeout(function() {
+			modal.closeModal();
+			// window.location = item.collectionViewUrl
+		}, 1500);
+	}
+	
+	function castEntry(trackId, title, artist, image) {
+		var entry = ''
+		
+		entry += '<div class="p-table__item col-4@md">'
+
+
+		entry += '	<div class="flex margin-bottom-xxs">'
+		entry += ' 		<img style="object-fit: scale-down" class="margin-xs" src="' + image + '">'
+		entry += '		<h4 class="p-table__title">' + title + '</h4>'
+		entry += '	</div>'
+
+		entry += '	<div class="p-table__price margin-bottom-sm"><i>by</i> ' + artist + '</div>'
+
+		entry += '<div class="margin-top-auto"><button id="' + trackId + '" class="btn btn--primary btn--md width-100%" aria-controls="modal1">Episodes...</button></div>'
+		entry += '</div>'
+		
+		return entry
+	}
+	
+</script>
+	
+</body>
+</html>
