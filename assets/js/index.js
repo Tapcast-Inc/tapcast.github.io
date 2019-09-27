@@ -33,23 +33,23 @@ function searchSetInfo(data) {
 	
 		$.each(data.results, function(index, element) {
 			$('#results').append(castEntry(
-				element.trackId,
+				element.collectionViewUrl,
 				element.trackName, 
 				element.artistName,
 				element.artworkUrl100
 			))
 		});
 		
-		var modals = document.getElementsByClassName('js-modal');
-		if( modals.length > 0 ) {
-			for( var i = 0; i < modals.length; i++) {
-				(function(i){modal = new Modal(modals[i]);})(i);
-			}
-		}
+		// var modals = document.getElementsByClassName('js-modal');
+// 		if( modals.length > 0 ) {
+// 			for( var i = 0; i < modals.length; i++) {
+// 				(function(i){modal = new Modal(modals[i]);})(i);
+// 			}
+// 		}
 		
 		$('#modal1').on("modalIsOpen", function(event) {
 			var podcastId = event.detail.id
-			$.getScript('https://itunes.apple.com/lookup?id=' + podcastId + '&callback=modalSetInfo')
+			//$.getScript('https://itunes.apple.com/lookup?id=' + podcastId + '&callback=modalSetInfo')
 		})
 }
 
@@ -58,6 +58,7 @@ function modalSetInfo(data) {
 	setTimeout(function() {
 		modal.closeModal();
 		window.location = item.collectionViewUrl
+		
 	}, 1500);
 }
 
@@ -74,7 +75,7 @@ function castEntry(trackId, title, artist, image) {
 
 	entry += '	<div class="p-table__price margin-bottom-sm"><i>by</i> ' + artist + '</div>'
 
-	entry += '<div class="margin-top-auto"><button id="' + trackId + '" class="btn btn--primary btn--md width-100%" aria-controls="modal1">Episodes...</button></div>'
+	entry += '<div class="margin-top-auto"><a href="' + trackId + '" class="btn btn--primary btn--md width-100%" aria-controls="modal1">Episodes...</a></div>'
 	entry += '</div>'
 	
 	return entry
