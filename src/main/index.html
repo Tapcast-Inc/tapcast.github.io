@@ -63,8 +63,9 @@
 
 <div class="modal modal--header-is-fixed modal--footer-is-fixed js-modal" id="modal1" data-animation="on">
   <div class="modal__content max-width-xs" role="alertdialog" tabindex="-1" aria-labelledby="modalTitle1" aria-describedby="modalDescription1">
+	  
     <header class="modal__header">
-      <h4 class="text-truncate" id="modalTitle1">Modal title</h4>
+      <h4 class="text-truncate" id="modalTitle1"> </h4>
 
       <button class="reset modal__close-btn js-modal__close">
         <svg class="icon" viewBox="0 0 20 20"><title>Close modal window</title><polygon points="18.707 2.707 17.293 1.293 10 8.586 2.707 1.293 1.293 2.707 8.586 10 1.293 17.293 2.707 18.707 10 11.414 17.293 18.707 18.707 17.293 11.414 10 18.707 2.707"/></svg>
@@ -74,22 +75,19 @@
     <div class="modal__body">
       <div class="text-component">
 
-		<img id="playerImage" class="max-width-xxxxs" style="border-radius: 15px" src="https://is1-ssl.mzstatic.com/image/thumb/Podcasts113/v4/e8/a2/c4/e8a2c427-769d-308a-7f12-197a8a6445db/mza_1998632243265378345.jpg/600x600bb.jpg">
-
-		<audio controls preload="auto" style="width: 100%" class="margin-top-sm">
-			<source src="" type="audio/mpeg">
-			Your browser does not support the audio element.
-		</audio>
+		  <h4>Please wait, opening episodes list...</h4>
 		  
       </div>
     </div>
 
+	<!--
     <footer class="modal__footer">
       <div class="flex justify-end flex-gap-xs">
         <button class="btn btn--subtle js-modal__close">Close</button>
         <!-- <button class="btn btn--primary">Install</button> -->
       </div>
     </footer>
+	-->
   </div>
 </div>
 
@@ -100,7 +98,9 @@
 	
 	$("#search").submit(function(event) {
 		event.preventDefault();
+		
 		$("#main_banner").hide()
+		
 		var term = $('#searchInputX').val().toLowerCase();
 		
 		if (term.length == 0) {
@@ -111,6 +111,11 @@
 		term = term.split(' ').join('+')
 		term = encodeURI(term)
 
+		$.getScript('https://itunes.apple.com/search?term=' + term + '&media=podcast&callback=searchSetInfo')
+	})
+
+
+/*
 		$.ajax({
 		    url: "https://itunes.apple.com/search",
 		    type: "GET",
@@ -135,11 +140,96 @@
 			MakeModal();
 			
 			$('#modal1').on("modalIsOpen", function(event) {
-				console.log("Modal open: " + event.detail.id)
-			})
-		})
+				var podcastId = event.detail.id
 
-	})
+console.log("HERE")				
+				// var script = document.createElement("script");
+			// 	script.type = "text/javascript";
+			// 	script.src = 'https://itunes.apple.com/lookup?id=' + podcastId + '&callback=modalSetInfo';
+			// 	document.body.appendChild(script);
+						
+				$.getScript('https://itunes.apple.com/lookup?id=' + podcastId + '&callback=modalSetInfo')
+						
+				// $.ajax({
+// 				    url: "https://itunes.apple.com/lookup",
+// 				    type: "GET",
+// 					dataType: 'json',
+// 				    data: {
+// 				        "id": podcastId,
+// 				    },
+// 					headers: {
+// 					        "Cookie": "geo=US",
+// 					    },
+// 				})
+// 				.done(function(data, textStatus, jqXHR) {
+// 				    console.log("HTTP Request Succeeded: " + jqXHR.status);
+// 				    console.log(data);
+// 				})
+				
+				
+			})
+			
+			
+			
+		}) // .done()
+*/
+	
+	function searchSetInfo(data) {
+		
+			$('#results').empty()
+		
+			console.log("data " + data)				
+		
+			$.each(data.results, function(index, element) {
+				$('#results').append(castEntry(
+					element.trackId,
+					element.trackName, 
+					element.artistName,
+					element.artworkUrl100
+				))
+			})
+			
+			MakeModal();
+			
+			$('#modal1').on("modalIsOpen", function(event) {
+				var podcastId = event.detail.id
+				$.getScript('https://itunes.apple.com/lookup?id=' + podcastId + '&callback=modalSetInfo')
+			})
+	}
+	
+	function modalSetInfo(data) {
+		
+		var item = data.results[0]
+
+		window.location = item.collectionViewUrl
+		
+		/*
+		jQuery.ajax({
+		    url: item.feedUrl,
+		    type: "GET",
+		})
+		.done(function(data, textStatus, jqXHR) {
+		    console.log("HTTP Request Succeeded: " + jqXHR.status);
+		    
+			var $xml = $(data);
+			console.log($xml)
+		    $xml.find("item").each(function() {
+		        var $this = $(this),
+		            item = {
+		                title: $this.find("title").text(),
+		                link: $this.find("link").text(),
+		                description: $this.find("description").text(),
+		                pubDate: $this.find("pubDate").text(),
+		                author: $this.find("author").text(),
+						url: $this.find("enclosure").attr("url"),
+		        }
+		        //Do something with item here...
+				console.log(item)
+		    });
+			
+		})
+		*/
+	}
 	
 	function castEntry(trackId, title, artist, image) {
 		var entry = ''
@@ -147,8 +237,8 @@
 		entry += '<div class="p-table__item col-4@md">'
 
 
-		entry += '	<div class="flex  margin-bottom-xxs">'
-		entry += ' 		<img class="margin-xs" src="' + image + '">'
+		entry += '	<div class="flex margin-bottom-xxs">'
+		entry += ' 		<img style="object-fit: scale-down" class="margin-xs" src="' + image + '">'
 		entry += '		<h4 class="p-table__title">' + title + '</h4>'
 		//entry += '		<span class="p-table__badge">Popular</span>'
 		entry += '	</div>'
