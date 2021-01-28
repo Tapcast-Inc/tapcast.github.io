@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.js": "/static/js/main.a444ccab.chunk.js",
+    "main.js.map": "/static/js/main.a444ccab.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.44a55c35.js",
+    "runtime-main.js.map": "/static/js/runtime-main.44a55c35.js.map",
+    "static/js/2.530d134e.chunk.js": "/static/js/2.530d134e.chunk.js",
+    "static/js/2.530d134e.chunk.js.map": "/static/js/2.530d134e.chunk.js.map",
+    "static/js/3.2896e401.chunk.js": "/static/js/3.2896e401.chunk.js",
+    "static/js/3.2896e401.chunk.js.map": "/static/js/3.2896e401.chunk.js.map",
+    "index.html": "/index.html",
+    "static/js/2.530d134e.chunk.js.LICENSE.txt": "/static/js/2.530d134e.chunk.js.LICENSE.txt",
+    "static/media/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.8c4986ee.svg": "/static/media/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.8c4986ee.svg",
+    "static/media/sanlab.f62c912b.png": "/static/media/sanlab.f62c912b.png",
+    "static/media/tapcast.20333f26.png": "/static/media/tapcast.20333f26.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.44a55c35.js",
+    "static/js/2.530d134e.chunk.js",
+    "static/js/main.a444ccab.chunk.js"
+  ]
+}
