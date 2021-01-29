@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/static/js/main.009b23b0.chunk.js",
-    "main.js.map": "/static/js/main.009b23b0.chunk.js.map",
+    "main.js": "/static/js/main.5221f92b.chunk.js",
+    "main.js.map": "/static/js/main.5221f92b.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.44a55c35.js",
     "runtime-main.js.map": "/static/js/runtime-main.44a55c35.js.map",
     "static/js/2.ea9b1bf1.chunk.js": "/static/js/2.ea9b1bf1.chunk.js",
@@ -12,11 +12,11 @@
     "static/js/2.ea9b1bf1.chunk.js.LICENSE.txt": "/static/js/2.ea9b1bf1.chunk.js.LICENSE.txt",
     "static/media/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.8c4986ee.svg": "/static/media/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.8c4986ee.svg",
     "static/media/sanlab.f62c912b.png": "/static/media/sanlab.f62c912b.png",
-    "static/media/tapcast.20333f26.png": "/static/media/tapcast.20333f26.png"
+    "static/media/tapcast-mac-dark.5f20a157.png": "/static/media/tapcast-mac-dark.5f20a157.png"
   },
   "entrypoints": [
     "static/js/runtime-main.44a55c35.js",
     "static/js/2.ea9b1bf1.chunk.js",
-    "static/js/main.009b23b0.chunk.js"
+    "static/js/main.5221f92b.chunk.js"
   ]
 }
